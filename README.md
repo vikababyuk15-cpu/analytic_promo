@@ -1,46 +1,39 @@
-📊 Provider Distribution Script (Google Apps Script)
-📌 Описание
+# 🧩 Provider Distribution Engine (Project 1)
 
-Этот скрипт автоматически распределяет список провайдеров из одного столбца Google Sheets по двум зонам таблицы (Top и Recommended) с учётом:
+Specialized **Google Apps Script** for automated distribution of game providers across promotional sections (Top/Recommended) with strict "No-Duplicate-in-Line" logic.
 
-приоритетности провайдеров
-предотвращения дублей внутри одной строки (линии)
-равномерного заполнения ячеек
-двух попыток размещения для каждого провайдера
+## 📌 Overview
+The script takes a raw list of providers and intelligently populates two target grids. It ensures that the same provider never appears twice in the same horizontal "line" (row of 6 slots) to maintain visual diversity on the platform.
 
+## 🚀 Key Logic
+*   **Dual-Slot Allocation:** Attempts to place each provider twice within a section for maximum exposure.
+*   **Performance-Based Priority:** 
+    *   **High-Performance:** First 20 providers are prioritized for the "Golden Lines" (Rows 1-3).
+    *   **Standard:** Other providers are filled into remaining slots (Rows 4-6) first.
+*   **Line-Aware Validation:** Before placing a provider, the script scans its current 6-slot line to prevent duplicates.
+*   **Grid Consistency:** Maintains the structure of both `Top` and `Recommended` sections independently.
 
-📁 Где используется
+## 🛠 Tech Stack
+*   **Language:** Google Apps Script (JavaScript)
+*   **Engine:** V8 Runtime
+*   **Data Structure:** Matrix manipulation (JSON parsing for deep cloning)
 
-Google Sheets:
+## 📊 Configuration (CONFIG)
+| Parameter | Range/Value | Description |
+| :--- | :--- | :--- |
+| **sourceRange** | `Q2:Q101` | Raw list of providers. |
+| **topRange** | `D2:D37` | Target grid for "Top" section (36 slots). |
+| **recRange** | `D38:D73` | Target grid for "Recommended" section (36 slots). |
+| **lineSize** | `6` | Number of slots per horizontal line. |
+| **priorityLimit** | `20` | Threshold for "High-Performance" status. |
 
-Лист: Discount_script
-Источник данных: колонка Q (Q2:Q101)
-Вывод:
-Top блок: D2:D37
-Recommended блок: D38:D73
-⚙️ Логика работы
-1. Разделение провайдеров
-Первые 20 провайдеров считаются high performance
-Остальные — обычные
-2. Приоритет заполнения
-High performance:
-Сначала заполняют верхнюю часть (priorityLineEnd = 18)
-Затем нижнюю часть
-Обычные провайдеры:
-Сначала нижняя часть
-Потом верхняя
-3. Ограничение дублей
+## ⚙️ Setup
+1.  **Sheet Name:** Set the sheet name in `ss.getSheetByName("")` (currently empty in your code).
+2.  **Run:** Execute `distributeProvidersProject1()`.
+3.  **Result:** The script will clear nothing; it only fills **empty** cells or replaces values based on the logic, then alerts "Done!".
 
-Провайдер не может появиться дважды в одной линии (блоке из 6 ячеек).
+> [!WARNING]  
+> If a provider cannot be placed due to line constraints, the script will skip the second slot to avoid breaking the "No-Duplicate" rule.
 
-Линия определяется так:
-
-каждые 6 ячеек = одна линия
-(lineSize = 6)
-4. Заполнение
-
-Для каждого провайдера:
-
-делается до 2 попыток размещения
-ищется первая подходящая пустая ячейка
-проверяется отсутствие дубля в линии
+---
+*Optimized for automated lobby management and UI consistency.*
